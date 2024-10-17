@@ -1,7 +1,4 @@
-import 'package:banner_status_internet_connection/banner_status_internet_connection.dart';
-import 'package:banner_status_internet_connection/src/provider/internet_connection_banner_provider.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+part of '../banner_status_internet_connection.dart';
 
 /// A widget that displays an internet connection status banner.
 ///

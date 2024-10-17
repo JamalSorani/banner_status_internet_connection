@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of '../banner_status_internet_connection.dart';
 
 /// Parameters used to customize the appearance and behavior of the internet connection banner.
 ///
