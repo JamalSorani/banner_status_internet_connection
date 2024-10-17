@@ -1,43 +1,46 @@
+import 'package:banner_status_internet_connection/parameters/internet_connection_banner_params.dart';
 import 'package:banner_status_internet_connection/provider/internet_connection_banner_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-/// A widget that displays a banner indicating the internet connection status.
+/// A widget that displays an internet connection status banner.
 ///
-/// This banner is shown when there is no internet access and provides a visual
-/// cue to the user. It uses a [ChangeNotifierProvider] to listen for changes
-/// in the internet connection status.
+/// The banner will appear when there is no internet connection, and it will hide when the connection is restored.
+///
+/// The [InternetConnectionBanner] accepts a [child] widget that will be displayed below the banner.
 class InternetConnectionBanner extends StatelessWidget {
-  /// The message displayed on the banner.
-  ///
-  /// @param message: The message of the banner [String].
-  final String message;
+  /// The widget that will be displayed beneath the banner.
+  final Widget? child;
 
-  /// The style applied to the message text.
-  ///
-  /// @param messageStyle: The text style for the banner message [TextStyle].
-  final TextStyle messageStyle;
+  /// Parameters for customizing the appearance and behavior of the banner.
+  final InternetConnectionBannerParams params;
 
-  /// The color of the banner's background.
+  /// Creates an instance of [InternetConnectionBanner].
   ///
-  /// @param backgroundColor: The background color of the banner [Color].
-  final Color backgroundColor;
-
-  /// Creates an [InternetConnectionBanner] widget.
-  ///
-  /// @param key: An optional key for the widget [Key].
-  /// @param message: The message of the banner [String].
-  /// @param messageStyle: The text style for the banner message [TextStyle].
-  /// @param backgroundColor: The background color of the banner [Color].
+  /// The [params] argument is required to define the appearance and text of the banner.
   const InternetConnectionBanner({
     super.key,
-    required this.message,
-    required this.messageStyle,
-    required this.backgroundColor,
+    this.child,
+    required this.params,
   });
 
   @override
   Widget build(BuildContext context) {
+    if (child != null) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _buildBanner(),
+          Expanded(child: child!),
+        ],
+      );
+    }
+
+    return _buildBanner();
+  }
+
+  /// Builds the internet connection banner and manages its visibility based on the provider's internet status.
+  Widget _buildBanner() {
     return ChangeNotifierProvider<InternetConnectionBannerProvider>(
       create: (_) => InternetConnectionBannerProvider(),
       child: Consumer<InternetConnectionBannerProvider>(
@@ -60,13 +63,13 @@ class InternetConnectionBanner extends StatelessWidget {
     );
   }
 
-  /// Builds the content of the banner when there is no internet access.
+  /// Builds the content of the banner when there is no internet connection.
   ///
-  /// @returns: A [Widget] representing the banner content [Widget].
+  /// Displays a message and an animated loading indicator.
   Widget _buildBannerContent() {
     return Container(
       key: const ValueKey("BannerVisible"),
-      color: backgroundColor,
+      color: params.backgroundColor,
       child: SafeArea(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -80,7 +83,7 @@ class InternetConnectionBanner extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 20),
-            Text(message, style: messageStyle),
+            Text(params.message, style: params.messageStyle),
           ],
         ),
       ),
