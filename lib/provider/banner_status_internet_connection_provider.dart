@@ -1,33 +1,41 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
-class ConnectivityProvider extends ChangeNotifier {
-  bool _hasInternetAccess = true;
-  bool get hasInternetAccess => _hasInternetAccess;
+// StateNotifier to manage internet connectivity status.
+class ConnectivityController extends StateNotifier<bool> {
+  late final StreamSubscription<InternetStatus> listener;
 
-  late final StreamSubscription<InternetStatus> _listener;
-
-  ConnectivityProvider() {
-    _initialize();
+  ConnectivityController() : super(true) {
+    initialize();
   }
 
-  void _initialize() {
-    _listener = InternetConnection().onStatusChange.listen((status) {
-      _hasInternetAccess = status == InternetStatus.connected;
-      notifyListeners();
+  void initialize() {
+    listener = InternetConnection().onStatusChange.listen((status) {
+      switch (status) {
+        case InternetStatus.connected:
+          state = true; // The internet is now connected
+          break;
+        case InternetStatus.disconnected:
+          state = false; // The internet is now disconnected
+          break;
+      }
     });
   }
 
   Future<void> checkInternetConnection() async {
-    _hasInternetAccess = await InternetConnection().hasInternetAccess;
-    notifyListeners();
+    state = await InternetConnection().hasInternetAccess;
   }
 
   @override
   void dispose() {
-    _listener.cancel();
+    listener.cancel();
     super.dispose();
   }
 }
+
+final connectivityProvider =
+    StateNotifierProvider<ConnectivityController, bool>(
+  (ref) => ConnectivityController(),
+);
