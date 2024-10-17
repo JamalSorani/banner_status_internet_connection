@@ -1,5 +1,5 @@
-import 'package:banner_status_internet_connection/parameters/internet_connection_banner_params.dart';
-import 'package:banner_status_internet_connection/provider/internet_connection_banner_provider.dart';
+import 'package:banner_status_internet_connection/banner_status_internet_connection.dart';
+import 'package:banner_status_internet_connection/src/provider/internet_connection_banner_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

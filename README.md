@@ -14,7 +14,7 @@ Add the package to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  banner_status_internet_connection: ^1.0.0  # Replace with the latest version
+  banner_status_internet_connection: ^0.0.4  # Replace with the latest version
 ```
 
 Run the following command to install the package:
@@ -47,23 +47,16 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(title: const Text('Internet Connection Banner Example')),
-        body: Column(
-          children: [
-            // Internet Connection Banner
-            InternetConnectionBanner(
-              message: 'No internet connection. Please check your settings.',
-              backgroundColor: Colors.red, // Background color of the banner
-              messageStyle: TextStyle(
-                color: Colors.white,
-                fontSize: 16.0,
-                decoration: TextDecoration.none,
-              ),
+        body: InternetConnectionBanner(
+          params: InternetConnectionBannerParams(
+            message: 'WAITING_RED'.tr,
+            backgroundColor: context.appTheme.colors.secondary,
+            messageStyle: context.appTheme.style.h3.copyWith(
+              color: Colors.white,
+              decoration: TextDecoration.none,
             ),
-            // Other widgets go here
-            Expanded(
-              child: Center(child: Text('Main Content Area')),
-            ),
-          ],
+          ),
+          child: Center(child: Text('Main Content Area')),
         ),
       ),
     );
