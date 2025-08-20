@@ -64,26 +64,10 @@ class InternetConnectionBanner extends StatelessWidget {
   ///
   /// Displays a message and an animated loading indicator.
   Widget _buildBannerContent() {
-    return Container(
+    return DefaultConnectionNotificationContent(
       key: const ValueKey("BannerVisible"),
-      color: params.backgroundColor,
-      child: SafeArea(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(
-              width: 24,
-              height: 24,
-              child: CircularProgressIndicator(
-                color: Colors.white,
-                strokeWidth: 2.0,
-              ),
-            ),
-            const SizedBox(width: 20),
-            Text(params.message, style: params.messageStyle),
-          ],
-        ),
-      ),
+      isConnected: false,
+      params: params,
     );
   }
 }
