@@ -1,6 +1,4 @@
-import 'package:banner_status_internet_connection/banner_status_internet_connection.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
+part of '../banner_status_internet_connection.dart';
 
 class DefaultConnectionNotificationContent extends StatelessWidget {
   const DefaultConnectionNotificationContent({
