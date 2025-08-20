@@ -4,11 +4,27 @@ class DefaultConnectionNotificationContent extends StatelessWidget {
   const DefaultConnectionNotificationContent({
     super.key,
     required this.isConnected,
-    required this.params,
+    required this.connectedText,
+    required this.disconnectedText,
+    required this.hasIndicationIcon,
+    required this.connectedTextStyle,
+    required this.disconnectedTextStyle,
+    required this.connectedIcon,
+    required this.disconnectedIcon,
+    required this.textAndIconSeparationWith,
+    required this.iconBoxSideLength,
   });
 
   final bool isConnected;
-  final InternetConnectionBannerParams params;
+  final String? connectedText;
+  final String? disconnectedText;
+  final bool hasIndicationIcon;
+  final TextStyle? connectedTextStyle;
+  final TextStyle? disconnectedTextStyle;
+  final Icon? connectedIcon;
+  final Icon? disconnectedIcon;
+  final double? textAndIconSeparationWith;
+  final double? iconBoxSideLength;
 
   @override
   Widget build(BuildContext context) {
@@ -20,27 +36,25 @@ class DefaultConnectionNotificationContent extends StatelessWidget {
         children: [
           Text(
             isConnected
-                ? (params.connectedText ?? 'Back Online')
-                : (params.disconnectedText ?? 'Retrying'),
-            style: (isConnected
-                    ? params.connectedTextStyle
-                    : params.disconnectedTextStyle) ??
+                ? (connectedText ?? 'Back Online')
+                : (disconnectedText ?? 'Retrying'),
+            style: (isConnected ? connectedTextStyle : disconnectedTextStyle) ??
                 const TextStyle(color: Colors.white),
           ),
-          if (params.hasIndicationIcon)
-            SizedBox(width: params.textAndIconSeparationWith ?? 10),
-          if (params.hasIndicationIcon)
+          if (hasIndicationIcon)
+            SizedBox(width: textAndIconSeparationWith ?? 10),
+          if (hasIndicationIcon)
             SizedBox(
-              height: params.iconBoxSideLength ?? 10,
-              width: params.iconBoxSideLength ?? 10,
+              height: iconBoxSideLength ?? 10,
+              width: iconBoxSideLength ?? 10,
               child: isConnected
-                  ? params.connectedIcon ??
+                  ? connectedIcon ??
                       const Icon(
                         Icons.check,
                         size: 12,
                         color: Colors.white,
                       )
-                  : params.disconnectedIcon ??
+                  : disconnectedIcon ??
                       (isIOS
                           ? CupertinoTheme(
                               data: CupertinoTheme.of(context)
