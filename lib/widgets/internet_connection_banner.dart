@@ -5,7 +5,7 @@ part of '../banner_status_internet_connection.dart';
 /// The banner will appear when there is no internet connection, and it will hide when the connection is restored.
 ///
 /// The [InternetConnectionBanner] accepts a [child] widget that will be displayed below the banner.
-class InternetConnectionBanner extends StatelessWidget {
+class InternetConnectionBanner extends StatefulWidget {
   final AlignmentGeometry alignment;
   final double? height;
   final double? width;
@@ -31,13 +31,8 @@ class InternetConnectionBanner extends StatelessWidget {
   final BorderRadiusGeometry? borderRadius;
   final Duration? disconnectedDuration;
   final Duration? connectedDuration;
-
-  /// The widget that will be displayed beneath the banner.
   final Widget child;
 
-  /// Creates an instance of [InternetConnectionBanner].
-  ///
-  /// The [params] argument is required to define the appearance and text of the banner.
   const InternetConnectionBanner({
     super.key,
     this.alignment = Alignment.topCenter,
@@ -69,72 +64,86 @@ class InternetConnectionBanner extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        _buildBanner(),
-        Expanded(child: child),
-      ],
-    );
+  State<InternetConnectionBanner> createState() =>
+      _InternetConnectionBannerState();
+}
+
+class _InternetConnectionBannerState extends State<InternetConnectionBanner> {
+  late final InternetConnectionBannerProvider _provider;
+
+  @override
+  void initState() {
+    super.initState();
+    _provider = InternetConnectionBannerProvider();
   }
 
-  /// Builds the internet connection banner and manages its visibility based on the provider's internet status.
-  Widget _buildBanner() {
-    return ChangeNotifierProvider<InternetConnectionBannerProvider>(
-      create: (_) => InternetConnectionBannerProvider(),
-      child: Consumer<InternetConnectionBannerProvider>(
-        builder: (context, provider, child) {
-          return AnimatedSwitcher(
-            duration: const Duration(milliseconds: 300),
-            transitionBuilder: (Widget child, Animation<double> animation) {
-              return SizeTransition(
-                sizeFactor: animation,
-                axisAlignment: -1.0,
-                child: child,
+  @override
+  void dispose() {
+    _provider.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          AnimatedBuilder(
+            animation: _provider,
+            builder: (context, child) {
+              return AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                transitionBuilder: (child, animation) {
+                  return SizeTransition(
+                    sizeFactor: animation,
+                    axisAlignment: -1.0,
+                    child: child,
+                  );
+                },
+                child: _provider.hasInternetAccess
+                    ? const SizedBox.shrink(key: ValueKey("BannerHidden"))
+                    : _buildBannerContent(),
               );
             },
-            child: provider.hasInternetAccess
-                ? const SizedBox.shrink(key: ValueKey("BannerHidden"))
-                : _buildBannerContent(),
-          );
-        },
+          ),
+          Expanded(child: widget.child),
+        ],
       ),
     );
   }
 
-  /// Builds the content of the banner when there is no internet connection.
-  ///
-  /// Displays a message and an animated loading indicator.
   Widget _buildBannerContent() {
     return ConnectionStatusView(
       isConnected: false,
-      alignment: alignment,
-      height: height,
-      width: width,
-      connectedBackgroundColor: connectedBackgroundColor,
-      disconnectedBackgroundColor: disconnectedBackgroundColor,
-      connectedContent: connectedContent,
-      disconnectedContent: disconnectedContent,
-      connectedConnectionNotification: connectedConnectionNotification,
-      disconnectedConnectionNotification: disconnectedConnectionNotification,
-      connectedText: connectedText,
-      disconnectedText: disconnectedText,
-      overlayAnimationType: overlayAnimationType,
+      alignment: widget.alignment,
+      height: widget.height,
+      width: widget.width ?? double.infinity,
+      connectedBackgroundColor: widget.connectedBackgroundColor,
+      disconnectedBackgroundColor: widget.disconnectedBackgroundColor,
+      connectedContent: widget.connectedContent,
+      disconnectedContent: widget.disconnectedContent,
+      connectedConnectionNotification: widget.connectedConnectionNotification,
+      disconnectedConnectionNotification:
+          widget.disconnectedConnectionNotification,
+      connectedText: widget.connectedText,
+      disconnectedText: widget.disconnectedText,
+      overlayAnimationType: widget.overlayAnimationType,
       shouldAlwaysPullContentDownOnTopAlignment:
-          shouldAlwaysPullContentDownOnTopAlignment,
-      animationCurve: animationCurve,
-      animationDuration: animationDuration,
-      hasIndicationIcon: hasIndicationIcon,
-      connectedTextStyle: connectedTextStyle,
-      disconnectedTextStyle: disconnectedTextStyle,
-      connectedIcon: connectedIcon,
-      disconnectedIcon: disconnectedIcon,
-      textAndIconSeparationWith: textAndIconSeparationWith,
-      iconBoxSideLength: iconBoxSideLength,
-      borderRadius: borderRadius,
-      disconnectedDuration: disconnectedDuration,
-      connectedDuration: connectedDuration,
+          widget.shouldAlwaysPullContentDownOnTopAlignment,
+      animationCurve: widget.animationCurve,
+      animationDuration: widget.animationDuration,
+      hasIndicationIcon: widget.hasIndicationIcon,
+      connectedTextStyle: widget.connectedTextStyle,
+      disconnectedTextStyle: widget.disconnectedTextStyle,
+      connectedIcon: widget.connectedIcon,
+      disconnectedIcon: widget.disconnectedIcon,
+      textAndIconSeparationWith: widget.textAndIconSeparationWith,
+      iconBoxSideLength: widget.iconBoxSideLength,
+      borderRadius: widget.borderRadius,
+      disconnectedDuration: widget.disconnectedDuration,
+      connectedDuration: widget.connectedDuration,
     );
   }
 }
