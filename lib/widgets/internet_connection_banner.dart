@@ -69,17 +69,17 @@ class InternetConnectionBanner extends StatefulWidget {
 }
 
 class _InternetConnectionBannerState extends State<InternetConnectionBanner> {
-  late final InternetConnectionBannerProvider _provider;
+  InternetConnectionBannerProvider? _provider;
 
   @override
   void initState() {
     super.initState();
-    _provider = InternetConnectionBannerProvider();
+    _provider ??= InternetConnectionBannerProvider();
   }
 
   @override
   void dispose() {
-    _provider.dispose();
+    _provider?.dispose();
     super.dispose();
   }
 
@@ -91,7 +91,7 @@ class _InternetConnectionBannerState extends State<InternetConnectionBanner> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           AnimatedBuilder(
-            animation: _provider,
+            animation: _provider!,
             builder: (context, child) {
               return AnimatedSwitcher(
                 duration: const Duration(milliseconds: 300),
@@ -102,7 +102,7 @@ class _InternetConnectionBannerState extends State<InternetConnectionBanner> {
                     child: child,
                   );
                 },
-                child: _provider.hasInternetAccess
+                child: _provider!.hasInternetAccess
                     ? const SizedBox.shrink(key: ValueKey("BannerHidden"))
                     : _buildBannerContent(),
               );
