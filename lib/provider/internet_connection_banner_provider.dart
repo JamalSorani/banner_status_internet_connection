@@ -25,8 +25,7 @@ class InternetConnectionBannerProvider extends ChangeNotifier {
   /// Performs an immediate check and subscribes to the stream.
   Future<void> _initialize() async {
     // 🔹 Do an immediate check at startup
-    _hasInternetAccess = await InternetConnection().hasInternetAccess;
-    notifyListeners();
+    await InternetConnection().hasInternetAccess;
 
     // 🔹 Then listen for changes
     _listener = InternetConnection().onStatusChange.listen((status) {
