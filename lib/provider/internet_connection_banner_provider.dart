@@ -28,6 +28,7 @@ class InternetConnectionBannerProvider extends ChangeNotifier {
     await InternetConnection().hasInternetAccess;
 
     _listener ??= InternetConnection().onStatusChange.listen((status) {
+      print(status);
       _noInternetAccess = (status == InternetStatus.disconnected);
       notifyListeners();
     });

@@ -28,7 +28,7 @@ class DefaultConnectionNotificationContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+    bool isIOS = Platform.isIOS;
 
     return Center(
       child: Row(
@@ -56,10 +56,11 @@ class DefaultConnectionNotificationContent extends StatelessWidget {
                       )
                   : disconnectedIcon ??
                       (isIOS
-                          ? CupertinoTheme(
-                              data: CupertinoTheme.of(context)
-                                  .copyWith(brightness: Brightness.dark),
-                              child: const CupertinoActivityIndicator(),
+                          ? const CupertinoTheme(
+                              data: CupertinoThemeData(
+                                brightness: Brightness.dark,
+                              ),
+                              child: CupertinoActivityIndicator(),
                             )
                           : const CircularProgressIndicator(
                               valueColor:
