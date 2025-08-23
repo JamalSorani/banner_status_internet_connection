@@ -1,4 +1,4 @@
-import 'package:banner_status_internet_connection/provider/internet_connection_banner_provider.dart';
+import 'package:elkood_connection_banner/provider/internet_connection_banner_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

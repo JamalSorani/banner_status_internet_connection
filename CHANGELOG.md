@@ -1,11 +1,5 @@
-# Changelog
-
-All notable changes to this project will be documented in this file.
-
-## v0.0.5
-
-* [17-10-2024] Code improvements for better performance and maintainability.
-
-## v0.0.1
-
-* [16-10-2024] Initial release of the package.
+0.0.74:
+- Dependencies:
+    - provider: ^6.1.2
+    - internet_connection_checker_plus: ^2.5.2
+    - connectivity_plus: ^5.0.2

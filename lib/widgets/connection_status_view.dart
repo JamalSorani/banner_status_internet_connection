@@ -1,4 +1,4 @@
-part of '../banner_status_internet_connection.dart';
+part of '../elkood_connection_banner.dart';
 
 class ConnectionStatusView extends StatelessWidget {
   const ConnectionStatusView({

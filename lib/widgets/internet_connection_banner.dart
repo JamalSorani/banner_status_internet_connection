@@ -1,4 +1,4 @@
-part of '../banner_status_internet_connection.dart';
+part of '../elkood_connection_banner.dart';
 
 /// A widget that displays an internet connection status banner.
 ///
