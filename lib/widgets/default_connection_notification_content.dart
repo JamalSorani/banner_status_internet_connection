@@ -28,7 +28,7 @@ class DefaultConnectionNotificationContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isIOS = Platform.isIOS;
+    bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
     return Center(
       child: Row(
