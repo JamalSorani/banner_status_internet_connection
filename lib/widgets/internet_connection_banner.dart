@@ -102,9 +102,9 @@ class _InternetConnectionBannerState extends State<InternetConnectionBanner> {
                     child: child,
                   );
                 },
-                child: _provider!.hasInternetAccess
-                    ? const SizedBox.shrink(key: ValueKey("BannerHidden"))
-                    : _buildBannerContent(),
+                child: _provider!.noInternetAccess
+                    ? _buildBannerContent()
+                    : const SizedBox.shrink(key: ValueKey("BannerHidden")),
               );
             },
           ),

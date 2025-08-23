@@ -2,34 +2,33 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
-/// A provider that monitors the internet connection status.
+/// A singleton provider that monitors the internet connection status.
 ///
 /// This class extends [ChangeNotifier] to notify listeners when the internet
-/// connection status changes.
+/// connection status changes. It ensures only one instance exists across the app.
 class InternetConnectionBannerProvider extends ChangeNotifier {
-  bool _hasInternetAccess = true;
-  late final StreamSubscription<InternetStatus> _listener;
+  // 🔹 Singleton instance
+  static final InternetConnectionBannerProvider _instance =
+      InternetConnectionBannerProvider._internal();
 
-  /// Creates an instance of [InternetConnectionBannerProvider].
-  ///
-  /// Initializes the internet connection status listener.
-  InternetConnectionBannerProvider() {
+  factory InternetConnectionBannerProvider() => _instance;
+
+  InternetConnectionBannerProvider._internal() {
     _initialize();
   }
 
-  /// Returns whether the device has internet access.
-  bool get hasInternetAccess => _hasInternetAccess;
+  bool _noInternetAccess = false;
+  bool get noInternetAccess => _noInternetAccess;
+
+  StreamSubscription<InternetStatus>? _listener;
 
   /// Initializes the listener to check internet connection status.
-  ///
   /// Performs an immediate check and subscribes to the stream.
   Future<void> _initialize() async {
-    // 🔹 Do an immediate check at startup
     await InternetConnection().hasInternetAccess;
 
-    // 🔹 Then listen for changes
-    _listener = InternetConnection().onStatusChange.listen((status) {
-      _hasInternetAccess = (status == InternetStatus.connected);
+    _listener ??= InternetConnection().onStatusChange.listen((status) {
+      _noInternetAccess = (status == InternetStatus.disconnected);
       notifyListeners();
     });
   }
@@ -37,7 +36,8 @@ class InternetConnectionBannerProvider extends ChangeNotifier {
   /// Cancels the internet connection listener when the provider is disposed.
   @override
   void dispose() {
-    _listener.cancel();
+    _listener?.cancel();
+    _listener = null;
     super.dispose();
   }
 }
